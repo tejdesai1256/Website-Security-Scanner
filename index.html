@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobJockey - Website Security Scanner</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-shield-alt"></i>
+                <span>JobJockey</span>
+            </div>
+            <nav class="nav-menu">
+                <a href="#about">About Us</a>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="#" class="login-btn">Login</a>
+                <a href="#" class="signup-btn">Sign Up</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="heroSection">
+        <div class="container">
+            <h1>Scan Your Website Security Instantly</h1>
+            <p class="hero-subtitle">Advanced cybersecurity analysis tool that scans your website for vulnerabilities, security issues, and performance insights in seconds</p>
+            
+            <div class="hero-features">
+                <span><i class="fas fa-bolt"></i> Fast</span>
+                <span><i class="fas fa-search"></i> Accurate</span>
+                <span><i class="fas fa-lock"></i> Secure</span>
+            </div>
+
+            <div class="search-box">
+                <i class="fas fa-globe"></i>
+                <input type="text" placeholder="Enter website URL (e.g., https://example.com)" id="urlInput">
+                <button class="scan-btn" onclick="scanWebsite()"><i class="fas fa-search"></i> Scan Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section (Hidden by default) -->
+    <section class="results-section" id="resultsSection" style="display: none;">
+        <div class="container">
+            <div class="results-header">
+                <button class="back-btn" onclick="backToScanner()"><i class="fas fa-arrow-left"></i> Back to Scanner</button>
+                <h2 id="resultWebsite"></h2>
+                <button class="download-btn" onclick="downloadReport()"><i class="fas fa-download"></i> Download Report (PDF)</button>
+            </div>
+
+            <!-- Scan Info -->
+            <div class="scan-info">
+                <p><strong>URL:</strong> <span id="resultUrl"></span></p>
+                <p><strong>Scanned:</strong> <span id="resultDate"></span></p>
+            </div>
+
+            <!-- Security Score Card -->
+            <div class="results-grid">
+                <div class="score-card-result">
+                    <div class="score-header">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>SECURITY SCORE</h3>
+                    </div>
+                    <div class="circular-progress">
+                        <svg viewBox="0 0 100 100">
+                            <defs>
+                                <linearGradient id="gradientStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            <circle cx="50" cy="50" r="45" class="progress-background"></circle>
+                            <circle cx="50" cy="50" r="45" class="progress-circle" id="progressCircle"></circle>
+                        </svg>
+                        <div class="score-value" id="scoreValue">92</div>
+                    </div>
+                    <div class="score-status" id="scoreStatus">Excellent</div>
+                </div>
+
+                <!-- SSL/TLS Certificate -->
+                <div class="result-card ssl-card">
+                    <div class="card-header">
+                        <i class="fas fa-lock"></i>
+                        <h3>SSL/TLS CERTIFICATE</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="result-item">
+                            <span class="label">Status:</span>
+                            <span class="value" id="sslStatus">Valid</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Protocol:</span>
+                            <span class="value" id="sslProtocol">TLS 1.3</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Expires:</span>
+                            <span class="value" id="sslExpires">2025-12-31</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Certificate:</span>
+                            <span class="value" id="sslCert">Valid</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Port Scan -->
+                <div class="result-card port-card">
+                    <div class="card-header">
+                        <i class="fas fa-server"></i>
+                        <h3>PORT SCAN</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="result-item">
+                            <span class="label">Open Ports:</span>
+                            <span class="value" id="openPorts">0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Vulnerable:</span>
+                            <span class="value" id="vulnerablePorts">0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Services:</span>
+                            <span class="value" id="runningServices">3</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Headers -->
+            <div class="results-grid">
+                <div class="result-card headers-card">
+                    <div class="card-header">
+                        <i class="fas fa-list-check"></i>
+                        <h3>SECURITY HEADERS</h3>
+                    </div>
+                    <div class="headers-list">
+                        <div class="header-item present">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Content-Security-Policy</span>
+                        </div>
+                        <div class="header-item present">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Strict-Transport-Security</span>
+                        </div>
+                        <div class="header-item present">
+                            <i class="fas fa-check-circle"></i>
+                            <span>X-Content-Type-Options</span>
+                        </div>
+                        <div class="header-item missing">
+                            <i class="fas fa-times-circle"></i>
+                            <span>X-Frame-Options</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vulnerabilities -->
+                <div class="result-card vuln-card">
+                    <div class="card-header">
+                        <i class="fas fa-bug"></i>
+                        <h3>VULNERABILITIES</h3>
+                    </div>
+                    <div class="vuln-summary">
+                        <div class="vuln-item critical">
+                            <span class="vuln-label">Critical</span>
+                            <span class="vuln-count" id="criticalVuln">0</span>
+                        </div>
+                        <div class="vuln-item high">
+                            <span class="vuln-label">High</span>
+                            <span class="vuln-count" id="highVuln">1</span>
+                        </div>
+                        <div class="vuln-item medium">
+                            <span class="vuln-label">Medium</span>
+                            <span class="vuln-count" id="mediumVuln">3</span>
+                        </div>
+                        <div class="vuln-item low">
+                            <span class="vuln-label">Low</span>
+                            <span class="vuln-count" id="lowVuln">2</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance & SEO -->
+            <div class="results-grid">
+                <div class="result-card perf-card">
+                    <div class="card-header">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <h3>PERFORMANCE METRICS</h3>
+                    </div>
+                    <div class="metrics-list">
+                        <div class="metric-item">
+                            <span class="metric-label">Page Load Time:</span>
+                            <span class="metric-value" id="pageLoadTime">1.2s</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">TTFB:</span>
+                            <span class="metric-value" id="ttfb">0.4s</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Largest Contentful Paint:</span>
+                            <span class="metric-value" id="lcp">2.1s</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Mobile Friendly:</span>
+                            <span class="metric-value success" id="mobileFriendly">Yes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEO Score -->
+                <div class="result-card seo-card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>SEO & ACCESSIBILITY</h3>
+                    </div>
+                    <div class="seo-metrics">
+                        <div class="metric-bar">
+                            <span class="bar-label">Meta Tags</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 95%;"></div>
+                            </div>
+                            <span class="bar-value">95%</span>
+                        </div>
+                        <div class="metric-bar">
+                            <span class="bar-label">Heading Structure</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 88%;"></div>
+                            </div>
+                            <span class="bar-value">88%</span>
+                        </div>
+                        <div class="metric-bar">
+                            <span class="bar-label">Accessibility</span>
+                            <div class="bar-container">
+                                <div class="bar-fill" style="width: 92%;"></div>
+                            </div>
+                            <span class="bar-value">92%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommendations -->
+            <div class="recommendations-card">
+                <div class="card-header">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>RECOMMENDATIONS</h3>
+                </div>
+                <div class="recommendations-list">
+                    <div class="recommendation-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>Update Security Headers</h4>
+                            <p>Add X-Frame-Options header to prevent clickjacking attacks</p>
+                        </div>
+                    </div>
+                    <div class="recommendation-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>Enable HTTP/2</h4>
+                            <p>Upgrade to HTTP/2 for better performance and security</p>
+                        </div>
+                    </div>
+                    <div class="recommendation-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h4>Implement Content Security Policy</h4>
+                            <p>Configure CSP to mitigate XSS and injection attacks</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="results-actions">
+                <button class="back-btn" onclick="backToScanner()"><i class="fas fa-arrow-left"></i> Back to Scanner</button>
+                <button class="download-btn" onclick="downloadReport()"><i class="fas fa-download"></i> Download Report (PDF)</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- What Does Our Scanner Detect -->
+    <section class="detector-section">
+        <div class="container">
+            <h2>What Does Our Scanner Detect?</h2>
+            
+            <div class="cards-grid">
+                <div class="detector-card ssl">
+                    <i class="fas fa-lock"></i>
+                    <h3>SSL/TLS Security</h3>
+                    <p>Validates SSL certificates, checks encryption protocols (TLS 1.2/1.3), verifies certificate expiry, and identifies insecure HTTPS configurations</p>
+                </div>
+
+                <div class="detector-card port">
+                    <i class="fas fa-server"></i>
+                    <h3>Port Scanning</h3>
+                    <p>Detects open ports, identifies exposed services, scans for known CVE vulnerabilities, and flags potential security risks in server configurations</p>
+                </div>
+
+                <div class="detector-card score">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Security Score</h3>
+                    <p>Comprehensive security rating based on SSL strength, vulnerability count, security headers, and overall risk assessment (0-100 scale)</p>
+                </div>
+
+                <div class="detector-card seo">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>SEO & Performance</h3>
+                    <p>Analyzes page load speed, TTFB, resource optimization, SEO meta tags, heading structure, and accessibility compliance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2>How It Works</h2>
+            <p class="section-subtitle">Get comprehensive security insights in just a few simple steps. Our scanner does all the heavy lifting for you.</p>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">01</div>
+                    <i class="fas fa-search"></i>
+                    <h3>Enter Your URL</h3>
+                    <p>Simply paste your website URL into the scanner. No registration or account required to get started.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">02</div>
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>We Analyze Your Site</h3>
+                    <p>Our advanced algorithms scan for SSL certificates, open ports, vulnerabilities, and security headers in real-time.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">03</div>
+                    <i class="fas fa-file-alt"></i>
+                    <h3>Get Detailed Report</h3>
+                    <p>Receive a comprehensive security report with vulnerability ratings, SEO metrics, and performance insights.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">04</div>
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Take Action</h3>
+                    <p>Follow our recommendations to fix security issues and improve your website's overall protection.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Score Section -->
+    <section class="security-score">
+        <div class="container">
+            <h2>Understand Your Security Score</h2>
+            <p class="section-subtitle">Your security score is calculated based on multiple factors including SSL configuration, vulnerabilities, security headers, and performance metrics.</p>
+            
+            <div class="score-cards-grid">
+                <div class="score-card excellent">
+                    <div class="score-badge">90-100</div>
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Excellent</h3>
+                    <p>Your website has robust security measures. All critical security protocols are properly configured.</p>
+                    <ul class="score-list">
+                        <li><i class="fas fa-check"></i> Valid SSL/TLS certificate</li>
+                        <li><i class="fas fa-check"></i> No critical vulnerabilities</li>
+                        <li><i class="fas fa-check"></i> All security headers present</li>
+                        <li><i class="fas fa-check"></i> Optimized performance</li>
+                    </ul>
+                </div>
+
+                <div class="score-card good">
+                    <div class="score-badge">70-89</div>
+                    <i class="fas fa-arrow-trend-up"></i>
+                    <h3>Good</h3>
+                    <p>Your site is generally secure but has minor issues that should be addressed for better protection.</p>
+                    <ul class="score-list">
+                        <li><i class="fas fa-check"></i> SSL certificate valid</li>
+                        <li><i class="fas fa-check"></i> Few low-risk vulnerabilities</li>
+                        <li><i class="fas fa-check"></i> Most security headers present</li>
+                        <li><i class="fas fa-check"></i> Good performance metrics</li>
+                    </ul>
+                </div>
+
+                <div class="score-card warning">
+                    <div class="score-badge">50-69</div>
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Needs Improvement</h3>
+                    <p>Your website has several security gaps that could be exploited. Immediate action recommended.</p>
+                    <ul class="score-list">
+                        <li><i class="fas fa-check"></i> SSL may have issues</li>
+                        <li><i class="fas fa-check"></i> Multiple vulnerabilities detected</li>
+                        <li><i class="fas fa-check"></i> Missing security headers</li>
+                        <li><i class="fas fa-check"></i> Performance could be better</li>
+                    </ul>
+                </div>
+
+                <div class="score-card critical">
+                    <div class="score-badge">0-49</div>
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h3>Critical</h3>
+                    <p>Your website is at high risk. Critical security vulnerabilities require urgent attention.</p>
+                    <ul class="score-list">
+                        <li><i class="fas fa-check"></i> SSL certificate issues</li>
+                        <li><i class="fas fa-check"></i> Critical vulnerabilities present</li>
+                        <li><i class="fas fa-check"></i> No security headers</li>
+                        <li><i class="fas fa-check"></i> Poor performance</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recently Scanned -->
+    <section class="recently-scanned">
+        <div class="container">
+            <div class="section-header">
+                <i class="fas fa-history"></i>
+                <h2>Recently Scanned Websites</h2>
+            </div>
+            <p class="section-subtitle">Reference reports from previous security scans</p>
+            
+            <div class="table-wrapper">
+                <table class="scan-table">
+                    <thead>
+                        <tr>
+                            <th>Website</th>
+                            <th>Score</th>
+                            <th>Status</th>
+                            <th>Issues</th>
+                            <th>Scanned</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><i class="fas fa-globe"></i> example.com</td>
+                            <td><span class="score-bar" style="background: linear-gradient(90deg, #00ff88 87%); width: 70px;"></span> 87</td>
+                            <td><span class="status secure">Secure</span></td>
+                            <td>2</td>
+                            <td>2 hours ago</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-globe"></i> testsite.io</td>
+                            <td><span class="score-bar" style="background: linear-gradient(90deg, #ffaa00 64%); width: 70px;"></span> 64</td>
+                            <td><span class="status moderate">Moderate</span></td>
+                            <td>8</td>
+                            <td>5 hours ago</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-globe"></i> mywebsite.org</td>
+                            <td><span class="score-bar" style="background: linear-gradient(90deg, #00ff88 92%); width: 70px;"></span> 92</td>
+                            <td><span class="status secure">Secure</span></td>
+                            <td>0</td>
+                            <td>1 day ago</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-globe"></i> demo-shop.com</td>
+                            <td><span class="score-bar" style="background: linear-gradient(90deg, #ff3333 45%); width: 70px;"></span> 45</td>
+                            <td><span class="status at-risk">At Risk</span></td>
+                            <td>15</td>
+                            <td>2 days ago</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Risks Without Scanning -->
+    <section class="risks-section">
+        <div class="container">
+            <div class="section-header warning-header">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h2>What Happens Without Regular Security Scans?</h2>
+            </div>
+            <p class="section-subtitle">Without proactive security scanning, your website remains vulnerable to exploitation. Here are the most common security risks that go undetected.</p>
+            
+            <div class="risks-grid">
+                <div class="risk-card ssl-risk">
+                    <i class="fas fa-lock"></i>
+                    <h3>SSL Certificate Vulnerabilities</h3>
+                    <p>Expired or misconfigured SSL certificates expose user data to man-in-the-middle attacks, allowing hackers to intercept sensitive information like passwords and credit card details.</p>
+                    <div class="impact"><i class="fas fa-exclamation-circle"></i> Impact: Data Breach Risk</div>
+                </div>
+
+                <div class="risk-card port-risk">
+                    <i class="fas fa-network-wired"></i>
+                    <h3>Open Ports & Exposed Services</h3>
+                    <p>Unnecessary open ports create entry points for attackers. Common vulnerabilities include exposed databases, admin panels, and outdated services running on non-standard ports.</p>
+                    <div class="impact"><i class="fas fa-exclamation-circle"></i> Impact: Unauthorized Access</div>
+                </div>
+
+                <div class="risk-card outdated-risk">
+                    <i class="fas fa-code-branch"></i>
+                    <h3>Outdated Software & Dependencies</h3>
+                    <p>Running outdated CMS, plugins, or libraries with known CVEs makes your website an easy target. Attackers scan for these vulnerabilities using automated tools.</p>
+                    <div class="impact"><i class="fas fa-exclamation-circle"></i> Impact: Remote Code Execution</div>
+                </div>
+
+                <div class="risk-card headers-risk">
+                    <i class="fas fa-eye"></i>
+                    <h3>Missing Security Headers</h3>
+                    <p>Absent HTTP security headers (CSP, HSTS, X-Frame-Options) leave websites vulnerable to XSS attacks, clickjacking, and protocol downgrade attacks.</p>
+                    <div class="impact"><i class="fas fa-exclamation-circle"></i> Impact: Cross-Site Scripting</div>
+                </div>
+            </div>
+
+            <div class="cta-box">
+                <h3><i class="fas fa-exclamation-triangle"></i> Don't wait for a breach to happen. Scan your website now and protect your digital assets.</h3>
+                <p>Our scanner runs <strong>non-invasive checks</strong> that won't impact your website performance.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <h2>About JobJockey</h2>
+            <p class="section-subtitle">Leading the way in cybersecurity solutions with cutting-edge technology and expert analysis</p>
+            
+            <div class="about-content">
+                <div class="about-box">
+                    <h3>Who We Are</h3>
+                    <p>JobJockey is a premier cybersecurity platform dedicated to making the web a safer place. Founded by security experts and ethical hackers, we've built a comprehensive website security scanner that helps businesses and individuals identify vulnerabilities before attackers do.</p>
+                    <p>Our mission is to democratize cybersecurity by providing enterprise-grade security scanning tools that are accessible, affordable, and easy to use. Whether you're a small business owner, a developer, or a large enterprise, we believe everyone deserves to know their security posture.</p>
+                    <p>With over 100,000+ websites scanned and counting, JobJockey has helped organizations worldwide strengthen their security defenses, achieve compliance, and protect their digital assets from emerging threats.</p>
+                </div>
+            </div>
+
+            <div class="values-grid">
+                <div class="value-card security">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Security First</h3>
+                    <p>We prioritize your security with non-invasive scans and encrypted data handling</p>
+                </div>
+
+                <div class="value-card accuracy">
+                    <i class="fas fa-target"></i>
+                    <h3>Accuracy</h3>
+                    <p>Powered by advanced algorithms that deliver precise vulnerability detection</p>
+                </div>
+
+                <div class="value-card community">
+                    <i class="fas fa-users"></i>
+                    <h3>Community</h3>
+                    <p>Built by security experts who believe in sharing knowledge and protecting users</p>
+                </div>
+
+                <div class="value-card excellence">
+                    <i class="fas fa-bookmark"></i>
+                    <h3>Excellence</h3>
+                    <p>Committed to continuous improvement and staying ahead of cyber threats</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <h2>Powerful Features</h2>
+            <p class="section-subtitle">Everything you need to secure your website and protect your digital assets from cyber threats</p>
+            
+            <div class="features-grid">
+                <div class="feature-card security-scan">
+                    <i class="fas fa-search-plus"></i>
+                    <h3>Comprehensive Security Scanning</h3>
+                    <p>Deep analysis of your website security including SSL certificates, encryption protocols, and security headers configuration.</p>
+                </div>
+
+                <div class="feature-card ssl-check">
+                    <i class="fas fa-lock"></i>
+                    <h3>SSL/TLS Certificate Analysis</h3>
+                    <p>Validate certificate authenticity, check expiration dates, verify certificate chains, and identify weak encryption protocols.</p>
+                </div>
+
+                <div class="feature-card port-scan">
+                    <i class="fas fa-server"></i>
+                    <h3>Advanced Port Scanning</h3>
+                    <p>Detect open ports, identify running services, and flag potentially vulnerable configurations that could be exploited.</p>
+                </div>
+
+                <div class="feature-card vuln-detect">
+                    <i class="fas fa-bug"></i>
+                    <h3>Vulnerability Detection</h3>
+                    <p>Scan for known CVE vulnerabilities, outdated software versions, and security misconfigurations across your infrastructure.</p>
+                </div>
+
+                <div class="feature-card headers-check">
+                    <i class="fas fa-list-check"></i>
+                    <h3>Security Headers Check</h3>
+                    <p>Verify presence and configuration of critical headers like CSP, HSTS, X-Frame-Options, and Content-Type-Options.</p>
+                </div>
+
+                <div class="feature-card seo-perf">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>SEO & Performance Insights</h3>
+                    <p>Analyze page load speed, TTFB, meta tags, heading structure, and image optimization for better search rankings.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section" id="pricing">
+        <div class="container">
+            <h2>Simple, Transparent Pricing</h2>
+            <p class="section-subtitle">Choose the plan that fits your security needs. No hidden fees, cancel anytime.</p>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card basic">
+                    <h3>One-Time Scan</h3>
+                    <div class="price"><span class="currency">Free</span><span class="period">/per scan</span></div>
+                    <p class="plan-description">Perfect for quick security checks</p>
+                    
+                    <ul class="features-list">
+                        <li><i class="fas fa-check"></i> Single website scan</li>
+                        <li><i class="fas fa-check"></i> Basic security analysis</li>
+                        <li><i class="fas fa-check"></i> SSL/TLS certificate check</li>
+                        <li><i class="fas fa-check"></i> Open ports detection</li>
+                        <li><i class="fas fa-check"></i> Security score report</li>
+                        <li><i class="fas fa-check"></i> View results online</li>
+                    </ul>
+                    <button class="pricing-btn">Get Started</button>
+                </div>
+
+                <div class="pricing-card premium popular">
+                    <div class="popular-badge">⭐ Most Popular</div>
+                    <h3>Monthly Plan</h3>
+                    <div class="price"><span class="currency">$29</span><span class="period">/per month</span></div>
+                    <p class="plan-description">For businesses needing regular monitoring</p>
+                    
+                    <ul class="features-list">
+                        <li><i class="fas fa-check"></i> Unlimited website scans</li>
+                        <li><i class="fas fa-check"></i> Advanced vulnerability detection</li>
+                        <li><i class="fas fa-check"></i> SSL/TLS & security headers</li>
+                        <li><i class="fas fa-check"></i> Port scanning & CVE checks</li>
+                        <li><i class="fas fa-check"></i> Download PDF reports</li>
+                        <li><i class="fas fa-check"></i> Email notifications</li>
+                        <li><i class="fas fa-check"></i> Priority support</li>
+                        <li><i class="fas fa-check"></i> Historical scan data</li>
+                        <li><i class="fas fa-check"></i> API access (100 calls/day)</li>
+                    </ul>
+                    <button class="pricing-btn primary">Subscribe Now</button>
+                </div>
+
+                <div class="pricing-card pro">
+                    <h3>Yearly Plan</h3>
+                    <div class="price"><span class="currency">$249</span><span class="period">/per year</span></div>
+                    <div class="savings">Save $99/year</div>
+                    <p class="plan-description">Best value for long-term security</p>
+                    
+                    <ul class="features-list">
+                        <li><i class="fas fa-check"></i> Everything in Monthly</li>
+                        <li><i class="fas fa-check"></i> Unlimited website scans</li>
+                        <li><i class="fas fa-check"></i> Advanced vulnerability detection</li>
+                        <li><i class="fas fa-check"></i> Download unlimited PDF reports</li>
+                        <li><i class="fas fa-check"></i> Continuous 24/7 monitoring</li>
+                        <li><i class="fas fa-check"></i> Automated scheduled scans</li>
+                        <li><i class="fas fa-check"></i> Custom security policies</li>
+                        <li><i class="fas fa-check"></i> Multi-domain management</li>
+                        <li><i class="fas fa-check"></i> Dedicated account manager</li>
+                        <li><i class="fas fa-check"></i> API access (unlimited)</li>
+                        <li><i class="fas fa-check"></i> White-label reports</li>
+                    </ul>
+                    <button class="pricing-btn">Subscribe Now</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>JobJockey</h4>
+                    <p>Making the web safer, one scan at a time.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Security</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 JobJockey. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
