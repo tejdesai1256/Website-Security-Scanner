@@ -288,6 +288,17 @@ document.querySelectorAll('.detector-card, .step-card, .score-card, .risk-card, 
 // Add animation keyframes dynamically
 const style = document.createElement('style');
 style.textContent = `
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
     @keyframes fadeInUp {
         from {
             opacity: 0;
@@ -310,6 +321,26 @@ style.textContent = `
         }
     }
 
+    @keyframes floatIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    @keyframes glow {
+        0%, 100% {
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+        50% {
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.5);
+        }
+    }
+
     @keyframes spin {
         from { transform: rotate(0deg); }
         to { transform: rotate(360deg); }
@@ -317,6 +348,10 @@ style.textContent = `
 
     .fa-spinner {
         animation: spin 1s linear infinite;
+    }
+
+    .hero h1 {
+        animation: slideDown 0.8s ease;
     }
 `;
 document.head.appendChild(style);

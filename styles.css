@@ -39,11 +39,12 @@ body {
 /* Navigation */
 .navbar {
     background-color: rgba(10, 14, 39, 0.95);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
     z-index: 1000;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
 }
 
 .navbar .container {
@@ -60,6 +61,15 @@ body {
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--primary);
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: transform 0.3s ease;
+}
+
+.nav-brand:hover {
+    transform: scale(1.05);
 }
 
 .nav-menu {
@@ -97,14 +107,15 @@ body {
     background: linear-gradient(135deg, var(--secondary), var(--primary));
     color: white;
     padding: 0.5rem 1.5rem;
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
     text-decoration: none;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 20px rgba(0, 212, 255, 0.2);
 }
 
 .signup-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(124, 58, 237, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0, 212, 255, 0.35);
 }
 
 /* Hero Section */
@@ -209,10 +220,15 @@ body {
     color: var(--text-primary);
     font-size: 1rem;
     outline: none;
+    transition: all 0.3s ease;
 }
 
 .search-box input::placeholder {
-    color: var(--text-secondary);
+    color: rgba(160, 174, 192, 0.6);
+}
+
+.search-box input:focus::placeholder {
+    color: rgba(160, 174, 192, 0.3);
 }
 
 .search-box i {
@@ -313,6 +329,11 @@ body {
 .detector-card i {
     font-size: 2.5rem;
     margin-bottom: 1rem;
+    transition: all 0.4s ease;
+}
+
+.detector-card:hover i {
+    transform: scale(1.15) rotate(5deg);
 }
 
 .detector-card.ssl {
@@ -417,6 +438,8 @@ body {
     justify-content: center;
     font-weight: bold;
     font-size: 1.2rem;
+    box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
+    animation: floatIn 0.6s ease;
 }
 
 .step-card i {
@@ -456,16 +479,18 @@ body {
 }
 
 .score-card {
-    background: linear-gradient(135deg, rgba(26, 31, 58, 0.6), rgba(45, 53, 85, 0.6));
+    background: linear-gradient(135deg, rgba(26, 31, 58, 0.7) 0%, rgba(45, 53, 85, 0.7) 100%);
     border: 2px solid var(--card-border);
-    border-radius: 1rem;
+    border-radius: 1.5rem;
     padding: 2rem;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    backdrop-filter: blur(20px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-md);
 }
 
 .score-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
 }
 
 .score-badge {
@@ -589,13 +614,14 @@ body {
 }
 
 .table-wrapper {
-    background: linear-gradient(135deg, rgba(26, 31, 58, 0.6), rgba(45, 53, 85, 0.6));
+    background: linear-gradient(135deg, rgba(26, 31, 58, 0.7) 0%, rgba(45, 53, 85, 0.7) 100%);
     border: 2px solid var(--card-border);
-    border-radius: 1rem;
+    border-radius: 1.5rem;
     padding: 2rem;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
     overflow-x: auto;
     margin-top: 2rem;
+    box-shadow: var(--shadow-md);
 }
 
 .scan-table {
@@ -624,7 +650,9 @@ body {
 }
 
 .scan-table tbody tr:hover {
-    background-color: rgba(0, 212, 255, 0.05);
+    background-color: rgba(0, 212, 255, 0.1);
+    box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.1);
+    transform: scale(1.01);
 }
 
 .score-bar {
@@ -679,16 +707,18 @@ body {
 }
 
 .risk-card {
-    background: linear-gradient(135deg, rgba(26, 31, 58, 0.6), rgba(45, 53, 85, 0.6));
+    background: linear-gradient(135deg, rgba(26, 31, 58, 0.7) 0%, rgba(45, 53, 85, 0.7) 100%);
     border: 2px solid var(--card-border);
-    border-radius: 1rem;
+    border-radius: 1.5rem;
     padding: 2rem;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    backdrop-filter: blur(20px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-md);
 }
 
 .risk-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
 }
 
 .risk-card.ssl-risk {
@@ -742,11 +772,13 @@ body {
 
 .cta-box {
     margin-top: 3rem;
-    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(124, 58, 237, 0.1));
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.12) 0%, rgba(124, 58, 237, 0.12) 100%);
     border: 2px solid var(--primary);
-    border-radius: 1rem;
+    border-radius: 1.5rem;
     padding: 2rem;
     text-align: center;
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.15);
+    backdrop-filter: blur(20px);
 }
 
 .cta-box h3 {
@@ -779,11 +811,12 @@ body {
 }
 
 .about-box {
-    background: linear-gradient(135deg, rgba(26, 31, 58, 0.6), rgba(45, 53, 85, 0.6));
+    background: linear-gradient(135deg, rgba(26, 31, 58, 0.7) 0%, rgba(45, 53, 85, 0.7) 100%);
     border: 2px solid var(--card-border);
-    border-radius: 1rem;
+    border-radius: 1.5rem;
     padding: 2rem;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-md);
 }
 
 .about-box h3 {
@@ -806,17 +839,19 @@ body {
 }
 
 .value-card {
-    background: linear-gradient(135deg, rgba(26, 31, 58, 0.6), rgba(45, 53, 85, 0.6));
+    background: linear-gradient(135deg, rgba(26, 31, 58, 0.7) 0%, rgba(45, 53, 85, 0.7) 100%);
     border: 2px solid var(--card-border);
-    border-radius: 1rem;
+    border-radius: 1.5rem;
     padding: 2rem;
     text-align: center;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    backdrop-filter: blur(20px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-md);
 }
 
 .value-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
 }
 
 .value-card.security {
@@ -887,17 +922,19 @@ body {
 }
 
 .feature-card {
-    background: linear-gradient(135deg, rgba(26, 31, 58, 0.6), rgba(45, 53, 85, 0.6));
+    background: linear-gradient(135deg, rgba(26, 31, 58, 0.7) 0%, rgba(45, 53, 85, 0.7) 100%);
     border: 2px solid var(--card-border);
-    border-radius: 1rem;
+    border-radius: 1.5rem;
     padding: 2rem;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    backdrop-filter: blur(20px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-md);
 }
 
 .feature-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
     border-color: var(--primary);
+    box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 212, 255, 0.2);
 }
 
 .feature-card i {
@@ -937,22 +974,28 @@ body {
 }
 
 .pricing-card {
-    background: linear-gradient(135deg, rgba(26, 31, 58, 0.8), rgba(45, 53, 85, 0.8));
+    background: linear-gradient(135deg, rgba(26, 31, 58, 0.8) 0%, rgba(45, 53, 85, 0.8) 100%);
     border: 2px solid var(--card-border);
-    border-radius: 1rem;
+    border-radius: 1.5rem;
     padding: 2rem;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    backdrop-filter: blur(20px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
+    box-shadow: var(--shadow-md);
 }
 
 .pricing-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
 }
 
 .pricing-card.popular {
     border-color: var(--primary);
-    box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.25), var(--shadow-lg);
+}
+
+.pricing-card.popular:hover {
+    box-shadow: 0 0 60px rgba(0, 212, 255, 0.35), var(--shadow-lg);
 }
 
 .popular-badge {
@@ -1046,16 +1089,18 @@ body {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     border: none;
     color: white;
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
 }
 
 .pricing-btn.primary:hover {
-    box-shadow: 0 10px 20px rgba(0, 212, 255, 0.3);
+    box-shadow: 0 15px 40px rgba(0, 212, 255, 0.4), 0 0 30px rgba(124, 58, 237, 0.2);
+    transform: translateY(-3px);
 }
 
 /* Results Section */
 .results-section {
     padding: 3rem 0 5rem;
-    animation: fadeIn 0.5s ease;
+    animation: fadeIn 0.8s ease;
 }
 
 @keyframes fadeIn {
@@ -1064,6 +1109,59 @@ body {
     }
     to {
         opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes floatIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(0, 212, 255, 0.5);
     }
 }
 
@@ -1089,38 +1187,56 @@ body {
     border: 2px solid var(--primary);
     color: var(--primary);
     padding: 0.65rem 1.5rem;
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
     cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
+    font-weight: 700;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.back-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--primary);
+    transition: left 0.4s ease;
+    z-index: -1;
+}
+
+.back-btn:hover::before {
+    left: 0;
 }
 
 .back-btn:hover {
-    background: var(--primary);
     color: var(--dark-bg);
     transform: translateX(-3px);
 }
 
 .download-btn {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
     border: none;
     color: white;
     padding: 0.65rem 1.5rem;
-    border-radius: 0.5rem;
+    border-radius: 0.75rem;
     cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
+    font-weight: 700;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    box-shadow: 0 8px 20px rgba(0, 212, 255, 0.25);
 }
 
 .download-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0, 212, 255, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0, 212, 255, 0.35);
 }
 
 .scan-info {
@@ -1157,16 +1273,24 @@ body {
 
 /* Score Card */
 .score-card-result {
-    background: linear-gradient(135deg, rgba(26, 31, 58, 0.8), rgba(45, 53, 85, 0.8));
-    border: 2px solid var(--card-border);
-    border-radius: 1rem;
-    padding: 2rem;
-    backdrop-filter: blur(10px);
+    background: linear-gradient(135deg, rgba(26, 31, 58, 0.8) 0%, rgba(45, 53, 85, 0.8) 100%);
+    border: 3px solid;
+    border-image: linear-gradient(135deg, var(--primary), var(--secondary)) 1;
+    border-radius: 2rem;
+    padding: 2.5rem;
+    backdrop-filter: blur(20px);
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     grid-column: span 1;
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.2), var(--shadow-lg);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.score-card-result:hover {
+    box-shadow: 0 0 60px rgba(0, 212, 255, 0.3), var(--shadow-lg);
+    transform: translateY(-8px);
 }
 
 .score-header {
@@ -1195,6 +1319,7 @@ body {
     width: 200px;
     height: 200px;
     margin: 1rem 0;
+    filter: drop-shadow(0 10px 30px rgba(0, 212, 255, 0.2));
 }
 
 .circular-progress svg {
@@ -1214,9 +1339,10 @@ body {
     stroke: url(#gradientStroke);
     stroke-width: 8;
     stroke-linecap: round;
-    transition: stroke-dashoffset 1s ease;
+    transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
     stroke-dasharray: 282.7;
     stroke-dashoffset: 282.7;
+    filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.3));
 }
 
 .score-value {
@@ -1238,16 +1364,18 @@ body {
 
 /* Result Cards */
 .result-card {
-    background: linear-gradient(135deg, rgba(26, 31, 58, 0.8), rgba(45, 53, 85, 0.8));
+    background: linear-gradient(135deg, rgba(26, 31, 58, 0.8) 0%, rgba(45, 53, 85, 0.8) 100%);
     border: 2px solid var(--card-border);
-    border-radius: 1rem;
+    border-radius: 1.5rem;
     padding: 2rem;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    backdrop-filter: blur(20px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-md);
 }
 
 .result-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
 }
 
 .card-header {
@@ -1314,12 +1442,13 @@ body {
 }
 
 .recommendations-card {
-    background: linear-gradient(135deg, rgba(26, 31, 58, 0.8), rgba(45, 53, 85, 0.8));
+    background: linear-gradient(135deg, rgba(26, 31, 58, 0.8) 0%, rgba(45, 53, 85, 0.8) 100%);
     border: 2px solid var(--card-border);
-    border-radius: 1rem;
+    border-radius: 1.5rem;
     padding: 2rem;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
     margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
 }
 
 .recommendations-card .card-header {
@@ -1546,6 +1675,12 @@ body {
     background: rgba(0, 0, 0, 0.2);
     border-radius: 0.75rem;
     border-left: 4px solid var(--success);
+    transition: all 0.3s ease;
+}
+
+.recommendation-item:hover {
+    background: rgba(0, 255, 136, 0.1);
+    transform: translateX(5px);
 }
 
 .recommendation-item i {
