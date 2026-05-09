@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Title -->
+    <title>JobJockey - Website Security Scanner</title>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body onload="handleHomeLoad()">
+
+    <!-- =========================
+         NAVIGATION HEADER
+    ========================== -->
+    <header class="navbar">
+        <div class="container">
+
+            <!-- Logo / Brand -->
+            <div class="nav-brand">
+                <i class="fas fa-shield-alt"></i>
+                <span>JobJockey</span>
+            </div>
+
+            <!-- Navigation Menu -->
+            <nav class="nav-menu">
+                <a href="#about">About Us</a>
+                <a href="#features">Features</a>
+                <a href="#pricing">Pricing</a>
+            </nav>
+
+            <!-- Login / Signup Buttons -->
+            <div class="nav-actions" id="navActions">
+                <a href="login.html" class="login-btn">Login</a>
+                <a href="signup.html" class="signup-btn">Sign Up</a>
+            </div>
+
+            <!-- Authenticated User Actions -->
+            <div class="nav-actions authenticated" id="navActionsAuth" style="display: none;">
+                <span class="user-email" id="navUserEmail"></span>
+                <a href="dashboard.html" class="dashboard-btn">Dashboard</a>
+                <button class="logout-btn" onclick="handleLogout()">Logout</button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- =========================
+         HERO SECTION
+    ========================== -->
+    <section class="hero" id="heroSection">
+        <div class="container">
+
+            <h1>Scan Your Website Security Instantly</h1>
+
+            <p class="hero-subtitle">
+                Advanced cybersecurity analysis tool that scans your website
+                for vulnerabilities, security issues, and performance insights in seconds
+            </p>
+
+            <!-- Hero Features -->
+            <div class="hero-features">
+                <span><i class="fas fa-bolt"></i> Fast</span>
+                <span><i class="fas fa-search"></i> Accurate</span>
+                <span><i class="fas fa-lock"></i> Secure</span>
+            </div>
+
+            <!-- Search Box -->
+            <div class="search-box">
+                <i class="fas fa-globe"></i>
+
+                <input
+                    type="text"
+                    placeholder="Enter website URL (e.g., https://example.com)"
+                    id="urlInput"
+                >
+
+                <button class="scan-btn" onclick="scanWebsite()">
+                    <i class="fas fa-search"></i> Scan Now
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =========================
+         RESULTS SECTION
+    ========================== -->
+    <section class="results-section" id="resultsSection" style="display: none;">
+        <div class="container">
+
+            <!-- Results Header -->
+            <div class="results-header">
+
+                <button class="back-btn" onclick="backToScanner()">
+                    <i class="fas fa-arrow-left"></i> Back to Scanner
+                </button>
+
+                <h2 id="resultWebsite"></h2>
+
+                <button class="download-btn" onclick="downloadReport()">
+                    <i class="fas fa-download"></i> Download Report (PDF)
+                </button>
+
+            </div>
+
+            <!-- Scan Information -->
+            <div class="scan-info">
+                <p><strong>URL:</strong> <span id="resultUrl"></span></p>
+                <p><strong>Scanned:</strong> <span id="resultDate"></span></p>
+            </div>
+
+            <!-- Security Score / SSL / Port Scan -->
+            <div class="results-grid">
+
+                <!-- Security Score Card -->
+                <div class="score-card-result">
+
+                    <div class="score-header">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>SECURITY SCORE</h3>
+                    </div>
+
+                    <div class="circular-progress">
+
+                        <svg viewBox="0 0 100 100">
+
+                            <defs>
+                                <linearGradient id="gradientStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+
+                            <circle cx="50" cy="50" r="45" class="progress-background"></circle>
+                            <circle cx="50" cy="50" r="45" class="progress-circle" id="progressCircle"></circle>
+
+                        </svg>
+
+                        <div class="score-value" id="scoreValue">92</div>
+                    </div>
+
+                    <div class="score-status" id="scoreStatus">Excellent</div>
+                </div>
+
+                <!-- SSL Certificate Card -->
+                <div class="result-card ssl-card">
+
+                    <div class="card-header">
+                        <i class="fas fa-lock"></i>
+                        <h3>SSL/TLS CERTIFICATE</h3>
+                    </div>
+
+                    <div class="card-content">
+
+                        <div class="result-item">
+                            <span class="label">Status:</span>
+                            <span class="value" id="sslStatus">Valid</span>
+                        </div>
+
+                        <div class="result-item">
+                            <span class="label">Protocol:</span>
+                            <span class="value" id="sslProtocol">TLS 1.3</span>
+                        </div>
+
+                        <div class="result-item">
+                            <span class="label">Expires:</span>
+                            <span class="value" id="sslExpires">2025-12-31</span>
+                        </div>
+
+                        <div class="result-item">
+                            <span class="label">Certificate:</span>
+                            <span class="value" id="sslCert">Valid</span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Port Scan Card -->
+                <div class="result-card port-card">
+
+                    <div class="card-header">
+                        <i class="fas fa-server"></i>
+                        <h3>PORT SCAN</h3>
+                    </div>
+
+                    <div class="card-content">
+
+                        <div class="result-item">
+                            <span class="label">Open Ports:</span>
+                            <span class="value" id="openPorts">0</span>
+                        </div>
+
+                        <div class="result-item">
+                            <span class="label">Vulnerable:</span>
+                            <span class="value" id="vulnerablePorts">0</span>
+                        </div>
+
+                        <div class="result-item">
+                            <span class="label">Services:</span>
+                            <span class="value" id="runningServices">3</span>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+    <footer class="footer">
+        <div class="container">
+
+            <div class="footer-content">
+
+                <!-- Footer About -->
+                <div class="footer-section">
+                    <h4>JobJockey</h4>
+                    <p>Making the web safer, one scan at a time.</p>
+                </div>
+
+                <!-- Footer Product Links -->
+                <div class="footer-section">
+                    <h4>Product</h4>
+
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </div>
+
+                <!-- Footer Legal -->
+                <div class="footer-section">
+                    <h4>Legal</h4>
+
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Security</a></li>
+                    </ul>
+                </div>
+
+                <!-- Social Media -->
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <p>&copy; 2026 JobJockey. All rights reserved.</p>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+
+    <!-- Authentication Script -->
+    <script>
+
+        // Handle Home Page Load
+        function handleHomeLoad() {
+
+            const user = auth.getCurrentUser();
+
+            const navActions = document.getElementById('navActions');
+            const navActionsAuth = document.getElementById('navActionsAuth');
+            const authPrompt = document.getElementById('authPrompt');
+
+            if (user) {
+
+                // User is logged in
+                navActions.style.display = 'none';
+                navActionsAuth.style.display = 'flex';
+
+                document.getElementById('navUserEmail').textContent = user.email;
+
+                if (authPrompt) {
+                    authPrompt.style.display = 'none';
+                }
+
+            } else {
+
+                // User is NOT logged in
+                navActions.style.display = 'flex';
+                navActionsAuth.style.display = 'none';
+
+                if (authPrompt) {
+                    authPrompt.style.display = 'block';
+                }
+            }
+        }
+
+        // Logout Function
+        function handleLogout() {
+
+            if (confirm('Are you sure you want to logout?')) {
+
+                auth.logout();
+
+                window.location.reload();
+            }
+        }
+
+    </script>
+
+</body>
+</html>
