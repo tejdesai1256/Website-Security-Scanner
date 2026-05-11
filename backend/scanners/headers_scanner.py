@@ -1,6 +1,7 @@
 import requests
 
 def scan_headers(url):
+
     try:
         response = requests.get(url, timeout=5)
 
@@ -20,6 +21,7 @@ def scan_headers(url):
         }
 
     except Exception as e:
+
         return {
             "success": False,
             "error": str(e)

@@ -3,8 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from scanners.headers_scanner import scan_headers
-
 from scanners.ssl_scanner import scan_ssl
+from scanners.port_scanner import scan_ports
+
+from services.scoring_service import calculate_score
+from scanners.seo_scanner import scan_seo
+from services.scoring_service import calculate_score
+from scanners.performance_scanner import scan_performance
 
 app = FastAPI()
 
@@ -17,16 +22,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Request model
 class ScanRequest(BaseModel):
     url: str
 
-@app.post("/scan")
-def scan_website(data: ScanRequest):
+# Home route
+@app.get("/")
+def home():
+    return {
+        "message": "Website Security Scanner API Running"
+    }
 
-    result = scan_headers(data.url)
-
-    return result
-
+# Scan route
 @app.post("/scan")
 def scan_website(data: ScanRequest):
 
@@ -34,7 +41,25 @@ def scan_website(data: ScanRequest):
 
     ssl_result = scan_ssl(data.url)
 
+    ports_result = scan_ports(data.url)
+
+    seo_result = scan_seo(data.url)
+
+    performance_result = scan_performance(data.url)
+
+    score_result = calculate_score(
+        headers_result,
+        ssl_result,
+        ports_result,
+        seo_result,
+        performance_result
+    )
+
     return {
+        "score": score_result,
         "headers": headers_result,
-        "ssl": ssl_result
+        "ssl": ssl_result,
+        "ports": ports_result,
+        "seo": seo_result,
+        "performance": performance_result
     }

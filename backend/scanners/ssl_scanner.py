@@ -10,7 +10,8 @@ def scan_ssl(url):
 
         context = ssl.create_default_context()
 
-        with socket.create_connection((hostname, 443)) as sock:
+        with socket.create_connection((hostname, 443), timeout=5) as sock:
+
             with context.wrap_socket(sock, server_hostname=hostname) as ssock:
 
                 cert = ssock.getpeercert()
@@ -24,7 +25,7 @@ def scan_ssl(url):
 
                 return {
                     "success": True,
-                    "issuer": dict(x[0] for x in cert['issuer']),
+                    "ssl_enabled": True,
                     "expiry_date": cert['notAfter'],
                     "days_left": days_left
                 }
