@@ -1,44 +1,234 @@
-// Scan Website Function
-function scanWebsite() {
-    const urlInput = document.getElementById('urlInput');
-    const url = urlInput.value.trim();
+async function scanWebsite() {
 
-    if (!url) {
-        alert('Please enter a website URL');
-        return;
-    }
+    try {
 
-    // Validate URL format
-    if (!isValidUrl(url)) {
-        alert('Please enter a valid URL (e.g., https://example.com)');
-        return;
-    }
+        const urlInput =
+            document.getElementById('urlInput');
 
-    // Show loading state
-    const scanBtn = document.querySelector('.scan-btn');
-    const originalText = scanBtn.innerHTML;
-    scanBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Scanning...';
-    scanBtn.disabled = true;
+        const url =
+            urlInput.value.trim();
 
-    // Simulate scanning process
-    setTimeout(() => {
-        console.log('Scanning:', url);
+        if (!url) {
+
+            alert('Please enter a website URL');
+
+            return;
+        }
+
+        // Validate URL
+        if (!isValidUrl(url)) {
+
+            alert(
+                'Please enter valid URL'
+            );
+
+            return;
+        }
+
+        // Show loading
+        const scanBtn =
+            document.querySelector('.scan-btn');
+
+        const originalText =
+            scanBtn.innerHTML;
+
+        scanBtn.innerHTML =
+            '<i class="fas fa-spinner fa-spin"></i> Scanning...';
+
+        scanBtn.disabled = true;
+
+        // Backend API
+        const response =
+            await fetch(
+                'http://127.0.0.1:8000/scan',
+                {
+                    method: 'POST',
+
+                    headers: {
+                        'Content-Type':
+                            'application/json'
+                    },
+
+                    body: JSON.stringify({
+                        url
+                    })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        console.log(data);
+
+        // Show results
+        document.getElementById(
+            'heroSection'
+        ).style.display = 'none';
+
+        document.getElementById(
+            'resultsSection'
+        ).style.display = 'block';
+
+        // =========================
+        // WEBSITE INFO
+        // =========================
+
+        document.getElementById(
+            'resultWebsite'
+        ).textContent =
+            new URL(url).hostname;
+
+        document.getElementById(
+            'resultUrl'
+        ).textContent =
+            url;
+
+        document.getElementById(
+            'resultDate'
+        ).textContent =
+            new Date().toLocaleString();
+
+        // =========================
+        // SCORE
+        // =========================
+
+        const score =
+            data.summary.security_score;
+
+        document.getElementById(
+            'scoreValue'
+        ).textContent =
+            score;
+
+        document.getElementById(
+            'scoreStatus'
+        ).textContent =
+            data.summary.risk_level;
+
+        // Progress circle
+        const progressCircle =
+            document.getElementById(
+                'progressCircle'
+            );
+
+        const circumference =
+            282.7;
+
+        const offset =
+            circumference -
+            (score / 100) *
+            circumference;
+
+        progressCircle.style
+            .strokeDashoffset = offset;
+
+        // =========================
+        // SSL
+        // =========================
+
+        document.getElementById(
+            'sslStatus'
+        ).textContent =
+            data.scans.ssl.ssl_enabled
+                ? 'Enabled'
+                : 'Disabled';
+
+        document.getElementById(
+            'sslProtocol'
+        ).textContent =
+            'HTTPS';
+
+        document.getElementById(
+            'sslExpires'
+        ).textContent =
+            data.scans.ssl.expiry_date || '-';
+
+        document.getElementById(
+            'sslCert'
+        ).textContent =
+            data.scans.ssl.success
+                ? 'Valid'
+                : 'Invalid';
+
+        // =========================
+        // PORTS
+        // =========================
+
+        document.getElementById(
+            'openPorts'
+        ).textContent =
+            data.scans.ports.open_ports
+                .length;
+
+        // =========================
+        // PERFORMANCE
+        // =========================
+
         
-        // Generate mock security report
-        const report = generateDetailedReport(url);
-        
-        // Display results
-        displayResults(url, report);
-        
+        // =========================
+        // SEO
+        // =========================
+
+        updateProgressBar(
+            'metaTags',
+            data.scans.seo
+                .meta_description
+                ? 100
+                : 40
+        );
+
+        updateProgressBar(
+            'heading',
+            data.scans.seo
+                .h1_count > 0
+                ? 100
+                : 50
+        );
+
+        updateProgressBar(
+            'accessibility',
+            100 -
+            (
+                data.scans.seo
+                .missing_alt_images * 10
+            )
+        );
+
+        // =========================
+        // RECOMMENDATIONS
+        // =========================
+
+        const recommendations =
+            data.summary
+                .recommendations;
+
+        console.log(
+            recommendations
+        );
+
         // Reset button
-        scanBtn.innerHTML = originalText;
+        scanBtn.innerHTML =
+            originalText;
+
         scanBtn.disabled = false;
-        
-        // Scroll to results
+
+        // Scroll
         setTimeout(() => {
-            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+
+            document.getElementById(
+                'resultsSection'
+            ).scrollIntoView({
+                behavior: 'smooth'
+            });
+
         }, 500);
-    }, 3000);
+
+    } catch(error) {
+
+        console.log(error);
+
+        alert('Scan failed');
+    }
 }
 
 // Generate Detailed Mock Report
@@ -489,4 +679,28 @@ document.querySelectorAll('button, a').forEach(element => {
             type: this.tagName.toLowerCase()
         });
     });
+});
+
+
+
+
+
+
+
+const recommendationList =
+    document.getElementById(
+        "recommendationsList"
+    );
+
+recommendationList.innerHTML = "";
+
+data.summary.recommendations
+.forEach(rec => {
+
+    const li =
+        document.createElement("li");
+
+    li.textContent = rec;
+
+    recommendationList.appendChild(li);
 });

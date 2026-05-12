@@ -8,7 +8,6 @@ from scanners.port_scanner import scan_ports
 
 from services.scoring_service import calculate_score
 from scanners.seo_scanner import scan_seo
-from services.scoring_service import calculate_score
 from scanners.performance_scanner import scan_performance
 
 app = FastAPI()
@@ -56,10 +55,30 @@ def scan_website(data: ScanRequest):
     )
 
     return {
-        "score": score_result,
-        "headers": headers_result,
+
+    "website": data.url,
+
+    "summary": {
+        "security_score":
+            score_result["security_score"],
+
+        "risk_level":
+            score_result["risk_level"],
+
+        "recommendations":
+            score_result["recommendations"]
+    },
+
+    "scans": {
+
         "ssl": ssl_result,
+
+        "headers": headers_result,
+
         "ports": ports_result,
+
         "seo": seo_result,
+
         "performance": performance_result
     }
+}
