@@ -40,7 +40,7 @@ async function scanWebsite() {
         // Backend API
         const response =
             await fetch(
-                'https://website-security-scanner-1.onrender.com/scan',
+                'http://127.0.0.1:8000/scan',
                 {
                     method: 'POST',
 
