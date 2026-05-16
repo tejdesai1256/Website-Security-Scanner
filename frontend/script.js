@@ -704,3 +704,20 @@ data.summary.recommendations
 
     recommendationList.appendChild(li);
 });
+
+// ===========================
+// FAQ Toggle Functionality
+// ===========================
+function toggleFAQ(element) {
+    // Close all other FAQ items
+    document.querySelectorAll('.faq-question').forEach(item => {
+        if (item !== element) {
+            item.classList.remove('active');
+            item.nextElementSibling.classList.remove('active');
+        }
+    });
+
+    // Toggle current FAQ item
+    element.classList.toggle('active');
+    element.nextElementSibling.classList.toggle('active');
+}
